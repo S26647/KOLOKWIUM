@@ -35,7 +35,17 @@ public class FireActionRepo : IFireActionRepo
             {
                 int idFireAction = Int32.Parse(dr["IdFireAction"].ToString());
                 DateTime starTime = Convert.ToDateTime(dr["StartTime"].ToString());
-                DateTime? endTime = Convert.ToDateTime(dr["EndTime"].ToString());
+                string? endTimetmp = dr["EndTime"].ToString();
+
+                DateTime? endTime;
+                if (endTimetmp == "")
+                {
+                    endTime = null;
+                }
+                else
+                {
+                    endTime = Convert.ToDateTime(dr["EndTime"].ToString());
+                }
 
                 FireFighterActionDTO firefighterdto = new FireFighterActionDTO(idFireAction, starTime, endTime);
 
@@ -91,8 +101,8 @@ public class FireActionRepo : IFireActionRepo
         var dr = await cmd.ExecuteReaderAsync();
         await dr.ReadAsync();
 
-        int id = Int32.Parse(dr["IdFireAction"].ToString());
-        if (id == null)
+        string id = dr["IdFireAction"].ToString();
+        if (id == "")
         {
             return false;
         }
